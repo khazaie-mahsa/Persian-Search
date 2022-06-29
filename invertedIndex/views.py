@@ -71,3 +71,34 @@ def serialize_index():
     path_dict_file = 'invertrd_index.json'
     with open(path_dict_file, 'w') as outfile:
         json.dump(dic, outfile)
+
+def create_document(document):
+    docID = len(list_txt)
+    docName = str(docID) + ".txt"
+    path_txt = os.path.join(path_txt_file, docName)
+    with open(path_txt, 'w',encoding="utf-8") as file:
+        file.write(document)
+    return docID
+
+def update_inverted_index(document, docID, index_path):
+    stopwords = stopwords_tokenize(path_stopwords)
+
+    words_tokenize_list = word_tokenize(document)
+    words_lemmatizer_list = words_lemmatizer(words_tokenize_list)
+    words_stopwords_list = words_stopwords(stopwords,words_lemmatizer_list)
+    print(words_stopwords_list)
+    with open(index_path, 'r') as index_file:
+        print("reading index...")
+        dictionary = json.load(index_file)
+    for word in words_stopwords_list:
+        if word not in dictionary:
+            print("adding new entry")
+            dictionary[word]=[]
+            dictionary[word].append(docID)
+        else:
+            print("updating existing entry")
+            if docID not in dictionary[word]:
+                dictionary[word].append(docID)
+        dictionary[word].sort()
+    with open(index_path, 'w') as outfile:
+        json.dump(dictionary, outfile)

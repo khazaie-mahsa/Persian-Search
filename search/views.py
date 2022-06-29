@@ -1,11 +1,13 @@
 from __future__ import unicode_literals
-from http.client import HTTPResponse
+from django.shortcuts import HttpResponse
 from django.http import JsonResponse
 from django.shortcuts import render
 from hazm import *
 import json
 from pathlib import Path
-from invertedIndex.views import words_lemmatizer, serialize_index
+from invertedIndex.views import words_lemmatizer, serialize_index, create_document, update_inverted_index
+
+path_dict_file = 'invertrd_index.json'
 
 def searchingSingleWord(input_list,dic):
   input_word = input_list[0]
@@ -98,10 +100,7 @@ def searching (input_word,dic):
     return single_word
 
 def search(request):
-    print(request)
     input = request.POST.get('query')
-    # input = 'اکتبر و حملات'
-    path_dict_file = 'invertrd_index.json'
     path = Path(path_dict_file)
     if not(path.is_file()):
       print ("generating index...")
@@ -111,6 +110,13 @@ def search(request):
         dic = json.load(index_file)
     x = searching(input, dic)
     return JsonResponse(x, safe=False)
+
+def add(request):
+  document = request.POST.get('document')
+  print(document)
+  docID = create_document(document)
+  update_inverted_index(document, docID, path_dict_file)
+  return HttpResponse(document)
 
 def index(request):
   return render(request, 'index.html')
