@@ -9,11 +9,14 @@ from invertedIndex.views import words_lemmatizer, serialize_index
 
 def searchingSingleWord(input_list,dic):
   input_word = input_list[0]
+  print(input_word)
   if input_word in dic.keys():
     return dic[input_word]
+  else:
+    return "not found"
 
 def searchingAnd(input_list,dic):
-  input_list.remove('&')
+  input_list.remove('و')
   word_1 = input_list[0]
   word_2 = input_list[1]
   result_list = []
@@ -41,7 +44,7 @@ def searchingAnd(input_list,dic):
   return result_list
 
 def searchingOr(input_list,dic):
-  input_list.remove('|')
+  input_list.remove('یا')
   word_1 = input_list[0]
   word_2 = input_list[1]
   result_list = []
@@ -95,7 +98,9 @@ def searching (input_word,dic):
     return single_word
 
 def search(request):
-    input = 'انسان'
+    print(request)
+    input = request.POST.get('query')
+    # input = 'اکتبر و حملات'
     path_dict_file = 'invertrd_index.json'
     path = Path(path_dict_file)
     if not(path.is_file()):
@@ -107,3 +112,5 @@ def search(request):
     x = searching(input, dic)
     return JsonResponse(x, safe=False)
 
+def index(request):
+  return render(request, 'index.html')

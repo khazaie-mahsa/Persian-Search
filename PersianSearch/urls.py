@@ -19,5 +19,6 @@ from search import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('search/', views.search),
+    path('', views.index),
+    path('search/', views.search, name="search"),
 ]
