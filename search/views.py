@@ -4,6 +4,7 @@ from django.http import JsonResponse
 from django.shortcuts import render
 from hazm import *
 import json
+from pathlib import Path
 from invertedIndex.views import words_lemmatizer, serialize_index
 
 def searchingSingleWord(input_list,dic):
@@ -94,11 +95,14 @@ def searching (input_word,dic):
     return single_word
 
 def search(request):
-    input = 'انسان و پروانه'
-    print ("generating index")
-    serialize_index()
+    input = 'انسان'
     path_dict_file = 'invertrd_index.json'
+    path = Path(path_dict_file)
+    if not(path.is_file()):
+      print ("generating index...")
+      serialize_index()
     with open(path_dict_file, 'r') as index_file:
+        print("reading index...")
         dic = json.load(index_file)
     x = searching(input, dic)
     return JsonResponse(x, safe=False)
