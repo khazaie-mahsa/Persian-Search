@@ -1,6 +1,8 @@
 from __future__ import unicode_literals
 from django.shortcuts import render
 from hazm import *
+import convert_numbers
+import re
 import json
 import os
 
@@ -35,6 +37,36 @@ def words_stopwords(stopwords_list,list_words):
     return filtered_list
 
 
+def convert_number_p(txt_file):
+  import re
+  x=re.findall(r'(([۰-۹]+[،|٫]*)+)',txt_file)
+  convert_dict ={
+      "۰":"0",
+      "۱":"1",
+      "۲":"2",
+      "۳":"3",
+      "۴":"4",
+      "۵":"5",
+      "۶":"6",
+      "۷":"7",
+      "۸":"8",
+      "۹":"9",
+  }
+
+  for i in range(len(x)):
+    if '٫'in x[i][0]:
+      s=x[i][0].replace('٫','')
+    elif '،' in x[i][0]:
+      s=x[i][0].replace('،','')
+    else:
+      s=x[i][0]
+    txt_file = txt_file.replace(x[i][0],s)
+
+
+  translation = txt_file.maketrans(convert_dict) 
+  translation_num = txt_file.translate(translation)
+  return translation_num
+
 def files_words_indexing(sub_list_txt,path):
     dictionary={}
     # list_docID=[]
@@ -45,6 +77,7 @@ def files_words_indexing(sub_list_txt,path):
         with open(path_txt, encoding="utf-8", errors="ignore") as f:
             docID=int(i.replace(".txt",""))    
             contents = f.read()
+            contents = convert_number_p(contents)
             # digit_find = contents.isdigit()
             # print(digit_find)
             words_tokenize_list = word_tokenize(contents)

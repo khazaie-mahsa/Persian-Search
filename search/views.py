@@ -5,7 +5,7 @@ from django.shortcuts import render
 from hazm import *
 import json
 from pathlib import Path
-from invertedIndex.views import words_lemmatizer, serialize_index, create_document, update_inverted_index
+from invertedIndex.views import words_lemmatizer, serialize_index, create_document, update_inverted_index, convert_number_p
 
 path_dict_file = 'invertrd_index.json'
 
@@ -84,6 +84,7 @@ def searchingOr(input_list,dic):
   return result_list
 
 def searching (input_word,dic):
+  input_word = convert_number_p(input_word)
   words_tokenize_list = word_tokenize(input_word)
   words_lemmatizer_list = words_lemmatizer(words_tokenize_list)
   #word1 and word2
