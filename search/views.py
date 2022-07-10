@@ -5,7 +5,7 @@ from django.shortcuts import render
 from hazm import *
 import json
 from pathlib import Path
-from invertedIndex.views import words_lemmatizer, serialize_index, create_document, update_inverted_index, convert_number_p
+from invertedIndex.views import *
 
 path_dict_file = 'invertrd_index.json'
 
@@ -121,3 +121,16 @@ def add(request):
 
 def index(request):
   return render(request, 'index.html')
+
+def display_document(request):
+  docId = request.POST.get('id')
+  document = read_document(docId)
+  if(not document):
+    res = {
+      'document':'could not open document'
+    }
+  else:
+    res = {
+      'document':document
+    }
+  return JsonResponse(res)

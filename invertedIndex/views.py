@@ -113,6 +113,13 @@ def create_document(document):
         file.write(document)
     return docID
 
+def read_document(docID):
+    docName = str(docID) + ".txt"
+    path_txt = os.path.join(path_txt_file, docName)
+    with open(path_txt, 'r') as file:
+        document = file.read()
+    return document
+
 def update_inverted_index(document, docID, index_path):
     stopwords = stopwords_tokenize(path_stopwords)
 

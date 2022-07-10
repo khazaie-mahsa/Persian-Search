@@ -22,4 +22,5 @@ urlpatterns = [
     path('', views.index),
     path('search/', views.search, name="search"),
     path('add/', views.add, name="add"),
+    path('display-document/', views.display_document, name="display_document"),
 ]
