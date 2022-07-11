@@ -116,7 +116,7 @@ def create_document(document):
 def read_document(docID):
     docName = str(docID) + ".txt"
     path_txt = os.path.join(path_txt_file, docName)
-    with open(path_txt, 'r') as file:
+    with open(path_txt, 'r', encoding="utf-8", errors="ignore") as file:
         document = file.read()
     return document
 
