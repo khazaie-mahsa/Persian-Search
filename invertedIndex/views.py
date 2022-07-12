@@ -1,8 +1,5 @@
 from __future__ import unicode_literals
-from django.shortcuts import render
 from hazm import *
-import convert_numbers
-import re
 import json
 import os
 
